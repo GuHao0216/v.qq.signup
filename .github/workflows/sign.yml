@@ -31,9 +31,9 @@ jobs:
           
       - name: sign
         env:
-          tx_cookie: ${{ secrets.tx_cookie }}
-          auth_refresh_url: ${{ secrets.auth_refresh_url }}
-          server_key: ${{ secrets.server_key }}
+          tx_cookie: ${{ secrets.TX_COOKIE }}
+          auth_refresh_url: ${{ secrets.AUTH_REFRESH_URL }}
+          server_key: ${{ secrets.SERVER_KEY }}
         run: |
           echo -n `date +%Y-%m-%d\ %H:%M:%S`\ -\ >> ./daily.log
           python3 auto.py --tx_cookie=$username --auth_refresh_url=$auth_refresh_url --server_key=$server_key >> ./daily.log
