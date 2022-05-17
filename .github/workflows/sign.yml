@@ -1,0 +1,53 @@
+name: v.qq.sign
+
+on:
+  workflow_dispatch:
+
+  schedule:
+  - cron: '25 23 * * *' # UTC+8小时=北京时间 23代表早上七点 UTC星期+1=北京时间  1,3,4,6对应周二，周四，周五，周日
+
+jobs:
+  job1:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Setup timezone
+        uses: zcong1993/setup-timezone@master
+        with:
+          timezone: Asia/Shanghai  
+      - uses: actions/checkout@v2
+
+      - name: Install Python
+        run: |
+          sudo apt update && \
+          sudo apt install python3
+        
+      - name: requirements
+        run: |
+          pip3 install -r requirements.txt
+          
+          
+      - name: sign
+        env:
+          tx_cookie: ${{ secrets.tx_cookie }}
+          auth_refresh_url: ${{ secrets.auth_refresh_url }}
+          server_key: ${{ secrets.server_key }}
+        run: |
+          echo -n `date +%Y-%m-%d\ %H:%M:%S`\ -\ >> ./daily.log
+          python3 auto.py --tx_cookie=$username --auth_refresh_url=$auth_refresh_url --server_key=$server_key >> ./daily.log
+          tail daily.log #避免日志上传失败丢失日志  
+      - name: Commit #上传日志到仓库，可以自行修改 name 和 email
+        env:
+         NAME: bot
+         EMAIL: bot@csu-covid19.com
+        run: |
+          git config --global user.name "$NAME"
+          git config --global user.email "$EMAIL"
+          git add .
+          git commit -m "bot checkin"
+      - name: Push log
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.TOKEN }}
