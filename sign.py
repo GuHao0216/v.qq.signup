@@ -2,15 +2,15 @@ import requests
 from requests import post
 
 # 腾讯Cookie,
-tx_cookie = ''
-auth_refresh_url = 'https://access.video.qq.com/user/auth_refresh?vappid=11059694&vsecret=fdf61a6be0aad57132bc5cdf78ac30145b6cd2c1470b0cfe&type=qq&g_tk=&g_vstk=406154242&g_actk=982078386&callback=jQuery19107263100220876779_1626052698163&_=1626052698164'
+# tx_cookie = ''
+# auth_refresh_url = 'https://access.video.qq.com/user/auth_refresh?vappid=11059694&vsecret=fdf61a6be0aad57132bc5cdf78ac30145b6cd2c1470b0cfe&type=qq&g_tk=&g_vstk=406154242&g_actk=982078386&callback=jQuery19107263100220876779_1626052698163&_=1626052698164'
 
 # TG配置
 TG_TOKEN = 'xxx'  # TG机器人的TOKEN
 CHAT_ID = 'xxx'  # 推送消息的CHAT_ID
 
 # 新版Server酱配置
-server_key = 'xxxxxx'
+# server_key = 'xxxxxx'
 
 # 企业微信配置
 corpid = 'xxx'     # 上面提到的你的企业ID
@@ -121,5 +121,13 @@ def response_handle(url, sign_headers):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='腾讯视频签到')
+    parser.add_argument('--tx_cookie', type=str, default=None)
+    parser.add_argument('--auth_refresh_url', type=str, default=None)
+    parser.add_argument('--server_key', type=str, default=None)
+    args = parser.parse_args()
+    tx_cookie = args.tx_cookie
+    auth_refresh_url = args.auth_refresh_url
+    server_key = args.server_key
     message = tx_sign()
     send_server('腾讯视频签到通知', message)
